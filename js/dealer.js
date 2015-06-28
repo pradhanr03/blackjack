@@ -18,13 +18,28 @@ var dealer = {
 		}
 	},
 	hit : function() {
+		var dealerimg3 = $("#dealer2");
+		var dealerimg4 = $("#dealer1");
+		var dealCounter = 0;
 		while (this.total < 17) {
+		dealCounter++;
 		this.total *= 0;
 		this.hands.push(deck.getCard());
 		this.getHandValue();
+			if (dealCounter === 1) {
+			dealerimg3.attr("src", dealer.hands[2].suit);
+			}
+				else if (dealCounter === 2) {
+					dealerimg4.attr("src", dealer.hands[3].suit);
+				}
 		console.log(this.getHandValue);
 		console.log("the total value of dealor is "+this.total);
 	}
+	console.log("this is the dealer counter "+dealCounter);
+	// return dealCounter;
+	},
+	resetHand : function() {
+		this.hands = [];
 	}
 	
 }

@@ -5,26 +5,64 @@
     <script src="http://code.jquery.com/jquery-2.1.4.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class = "bgimg" background = "http://www.casinopartiesphoenix.com/images/casino-party-blackjack-table2.jpg">
 <script type="text/javascript" src='js/card.js'></script>
 <script type="text/javascript" src='js/deck.js'></script>
 <script type="text/javascript" src='js/player.js'></script>
 <script type="text/javascript" src='js/dealer.js'></script>
 <script type="text/javascript" src='js/app.js'></script>
-<script type="text/javascript" src='js/button.js'></script>
-<button type="button" class="deal">Deal</button>
+<!-- <script type="text/javascript" src='js/app1.js'></script> -->
+
+<div class = "card1">
+</div>
 <div id ="game">
-<button type="button" class="hit">Hit</button>
-<button type="button" class="stand">Stand</button>
-<button type="button" class="double">Double</button>
+
+</div>
+
+
+<div id ="card">
+
+<div id ="pic">
+<img src = "" id ="image">
+</div>
+<div id ="dealerWrap" class ="dealer">
+<img src ="" id = "dealer1">
+
+<img src ="" id = "dealer2">
+
+<img src ="" id= "dealer3">
+
+<img src ="" id= "dealer4">
+</div>
+<div id ="playerWrap" class ="player">
+<img src ="" id = "player1">
+
+<img src ="" id = "player2">
+
+<img src ="" id= "player3">
+
+<img src ="" id= "player4">
+
 </div>
 <div id ="chips">
-<button type="button" class="1">$1</button>
-<button type="button" class="5">$5</button>
-<button type="button" class="25">$25</button>
-<button type="button" class="100">$100</button>
+<button type="button" id ="chip" class="1">$1</button>
+<button type="button" id ="chip" class="5">$5</button>
+<button type="button" id ="chip" class="25">$25</button>
+<button type="button" id ="chip" class="100">$100</button>
 </div>
-<div id = "balance">BALANCE</div>
-<div id = "bet">Bet Amount</div>
+<div class = "bal">
+<div id = "balname" class = "test">Money:</div>
+<div id = "balance"></div>
+<div id = "bet">Bet:</div>
+<div id = "amount"></div>
+</div>
+<button type="button" class="hit" id="play">Hit</button>
+<button type="button" class="stand" id="play">Stand</button>
+<button type="button" class="double" id="play">Double</button>
+<button type="button" class="deal">Deal</button>
+<button type="button" class="playAgain">Next Round</button>
+<div class ="winOrLose"></div>
+</div>
+
 </body>
 </html>

@@ -1,9 +1,21 @@
+var image1 = $("#player4");
+	var image2 = $("#player3");
+	var image3 = $("#player2");
+	var image4 = $("#player1");
+	var dealerimg1 = $("#dealer4");
+	var dealerimg2 = $("#dealer3");
+	var dealerimg3 = $("#dealer2");
+	var dealerimg4 = $("#dealer1");
+	var betAmount = $("#amount");
+	var balanceAmount = $("#balance");
+	
+
 var player = {
 	hands : [],
+	startBalance : 1000,
 	balance : 1000,
-	bet : 1000 - this.balance,
+	bet : 0,
 	total : 0,
-	// this.chips = ["1","5","25","100"],
 	getHandValue : function() {
 		for(var i = 0; i < this.hands.length; i++) {
 			if((this.hands[i].value === "J") || (this.hands[i].value === "Q") || (this.hands[i].value === "K")) {
@@ -12,11 +24,15 @@ var player = {
 			} else if(this.hands[i].value === "A") {
 				this.total += 11;
 				console.log("added 11 for A");
-			} else {
-				this.total += this.hands[i].value;
-				console.log(this.hands[i].value);
-				console.log("added the value for numbers");
-			}
+				}  else if (this.total >21) {
+						if (this.hands[i].value === "A") {
+							this.total -= 10;
+						}
+					} else {
+						this.total += this.hands[i].value;
+						console.log(this.hands[i].value);
+						console.log("added the value for numbers");
+						}
 		}
 	},
 	hit : function() {
@@ -28,6 +44,7 @@ var player = {
 		console.log(this.getHandValue);
 		console.log("The total value of player is "+this.total);
 		}
+		checkForWin();
 	},
 	stay : function() {
 		checkForWin();	
@@ -36,50 +53,232 @@ var player = {
 	},
 	double : function() {
 		this.hit();
-		// checkForWin();	
-		this.balance -= this.bet;
+		checkForWin();	
+		// this.balance -= this.bet;
 		console.log(player.hands);
 		console.log(player.balance);
 
 	},
-
-
-
+	betWon : function() {
+		
+		this.balance += this.bet;
+		console.log(player.balance);
+		$("#balance").text(this.balance);
+				
+	},
+	resetBet : function() {
+		this.bet = 0;
+		$("#amount").text(this.bet);
+	},
+	resetHand : function() {
+		this.hands = [];
+	}
 }
 
 var checkForWin = function() {
 
-	if (player.total <= 21)  {
-		 if (player.total > dealer.total) {
-			console.log("Player Wins");
-			player.balance += 2*player.bet;
-			return true;
+	if ((player.total > 21) && (dealer.total<22)) {
+		for (var i =0; i<player.hands.length; i++) {
+			if (player.hands[i].value === "A") {
+							player.total -= 10;
+							if (player.total === 21) {
+								console.log("player won");
+								var bet = $("#amount").html();
+						        var money = $("#balance").html();
+						        var newMoney = 3.5*(parseInt(bet))+parseInt(money);
+						        $("#balance").html(newMoney);		
+								$(".winOrLose").html("Blackjack Win!");
+								$("#amount").html("0");
+								dealerimg2.attr("src", dealer.hands[1].suit);
+							}
+								if ((player.total > dealer.total) &&(player.total <21)) {
+									console.log("player won");
+									var bet = $("#amount").html();
+							        var money = $("#balance").html();
+							        var newMoney = 3*(parseInt(bet))+parseInt(money);
+							        $("#balance").html(newMoney);		
+									$(".winOrLose").html("You Win!");
+									$("#amount").html("0");
+									dealerimg2.attr("src", dealer.hands[1].suit);
+								}
+									if (player.total>21) {
+										console.log("Player Bust!");
+										var bet = $("#amount").html();
+								        var money = $("#balance").html();
+								        var newMoney = parseInt(money);
+								        $("#balance").html(newMoney);		
+										$(".winOrLose").html("You Lose!");
+										$("#amount").html("0");
+										dealerimg2.attr("src", dealer.hands[1].suit);
+									}
+			}
 		}
-		
 
-		// return "Player Wins";
+			console.log("Player Bust!");
+			var bet = $("#amount").html();
+			var money = $("#balance").html();
+			var newMoney = parseInt(money);
+			$("#balance").html(newMoney);		
+			$(".winOrLose").html("You Lose!");
+			$("#amount").html("0");
+			$("#dealer3").attr("src", dealer.hands[1].suit);
+	
 	}
-			else if (dealer.total <= 21) {
-				if (player.total < dealer.total) {
-				console.log("Dealer Wins");
-			// return "Dealor Wins";
-				dealer.balance += 2*player.bet;
-				return false;
-
+		else if ((dealer.total > 21) && (player.total <22)) {
+			for (var i =0; i<dealer.hands.length; i++) {
+				if (dealer.hands[i].value === "A") {
+								dealer.total -= 10;
+								if (dealer.total === 21) {
+									console.log("player lose");
+									var bet = $("#amount").html();
+							        var money = $("#balance").html();
+							        var newMoney = parseInt(money);
+							        $("#balance").html(newMoney);		
+									$(".winOrLose").html("You Lose!");
+									$("#amount").html("0");
+									dealerimg2.attr("src", dealer.hands[1].suit);
+								}
+									if ((player.total < dealer.total) &&(dealer.total <21)) {
+										console.log("player lose");
+										var bet = $("#amount").html();
+								        var money = $("#balance").html();
+								        var newMoney = parseInt(money);
+								        $("#balance").html(newMoney);		
+										$(".winOrLose").html("You Lose!");
+										$("#amount").html("0");
+										dealerimg2.attr("src", dealer.hands[1].suit);
+									}
+										if (dealer.total>21) {
+											console.log("Dealer Bust!");
+											var bet = $("#amount").html();
+									        var money = $("#balance").html();
+									        var newMoney = parseInt(money)+ 3*(parseInt(bet));
+									        $("#balance").html(newMoney);		
+											$(".winOrLose").html("You Win!");
+											$("#amount").html("0");
+											dealerimg2.attr("src", dealer.hands[1].suit);
+										}
 				}
 			}
-					else if ((player.total > 21) && (dealer.total < player.total)) {
-						console.log("Dealer Wins");
-						dealer.balance += 2*player.bet;
-						return false;	
-					}
-						else if (player.total === dealer.total) {
-							player.balance += 2*player.bet;
-							console.log("it's a tie!");
-							return false;
-						}
 
+			console.log("Dealer Bust!");
+			var bet = $("#amount").html();
+			var money = $("#balance").html();
+			var newMoney = parseInt(money)+ 3*(parseInt(bet));
+			$("#balance").html(newMoney);		
+			$(".winOrLose").html("You Win!");
+			$("#amount").html("0");
+			dealerimg2.attr("src", dealer.hands[1].suit);
 	
+		}
+			else if ((dealer.total > 21) && (player.total > 21)) {
+			for (var i =0; i<dealer.hands.length; i++) {
+				if (dealer.hands[i].value === "A") {
+									dealer.total -= 10;
+					for (var j =0; j<player.hands.length; j++) {
+						if (player.hands[j].value === "A") {
+									player.total -= 10;
+										if (dealer.total>21) {
+											console.log("Dealer Bust!");
+											var bet = $("#amount").html();
+										    var money = $("#balance").html();
+										    var newMoney = parseInt(money)+ 3*(parseInt(bet));
+										    $("#balance").html(newMoney);		
+											$(".winOrLose").html("Dealer Bust!");
+											$("#amount").html("0");
+											dealerimg2.attr("src", dealer.hands[1].suit);
+										}
+												if ((player.total < dealer.total) &&(dealer.total <22)) {
+													console.log("player lose");
+													var bet = $("#amount").html();
+											        var money = $("#balance").html();
+											        var newMoney = parseInt(money);
+											        $("#balance").html(newMoney);		
+													$(".winOrLose").html("You Lose!");
+													$("#amount").html("0");
+													dealerimg2.attr("src", dealer.hands[1].suit);
+												}
+													if ((player.total > dealer.total) &&(player.total <22)) {
+														console.log("player won");
+														var bet = $("#amount").html();
+												        var money = $("#balance").html();
+												        var newMoney = 3*(parseInt(bet))+parseInt(money);
+												        $("#balance").html(newMoney);		
+														$(".winOrLose").html("You Win!");
+														$("#amount").html("0");
+														dealerimg2.attr("src", dealer.hands[1].suit);
+													}
+					}
+				}
+			}
+			}
+		}
+				else if ((player.total>dealer.total) && (player.total<22)) {
+					console.log("player won");
+					var bet = $("#amount").html();
+					var money = $("#balance").html();
+					var newMoney = 3*(parseInt(bet))+parseInt(money);
+					$("#balance").html(newMoney);		
+					$(".winOrLose").html("You Win!");
+					$("#amount").html("0");
+					dealerimg2.attr("src", dealer.hands[1].suit);
+
+				}
+					else if ((player.total>dealer.total) && (player.total===21)) {
+						console.log("player won");
+						var bet = $("#amount").html();
+						var money = $("#balance").html();
+						var newMoney = 3.5*(parseInt(bet))+parseInt(money);
+						$("#balance").html(newMoney);		
+						$(".winOrLose").html("You Win!");
+						$("#amount").html("0");
+						dealerimg2.attr("src", dealer.hands[1].suit);
+
+					}
+						else if ((player.total===dealer.total) && (player.total===21)) {
+							console.log("Blackjack!");
+							var bet = $("#amount").html();
+							var money = $("#balance").html();
+							var newMoney = 3.5*(parseInt(bet))+parseInt(money);
+							$("#balance").html(newMoney);		
+							$(".winOrLose").html("BlackJack!");
+							$("#amount").html("0");
+							dealerimg2.attr("src", dealer.hands[1].suit);
+
+						}
+							else if ((player.total===dealer.total) && (player.total<21)) {
+								console.log("Tie!");
+								var bet = $("#amount").html();
+								var money = $("#balance").html();
+								var newMoney = 3*(parseInt(bet))+parseInt(money);
+								$("#balance").html(newMoney);		
+								$(".winOrLose").html("You're Lucky!");
+								$("#amount").html("0");
+								dealerimg2.attr("src", dealer.hands[1].suit);
+
+							}
+								else if ((player.total<=21) && (dealer.total<=21)) {
+									if (player.total >dealer.total) {
+										console.log("player won");
+										var bet = $("#amount").html();
+										var money = $("#balance").html();
+										var newMoney = 3*(parseInt(bet))+parseInt(money);
+										$("#balance").html(newMoney);		
+										$(".winOrLose").html("You Win!");
+										$("#amount").html("0");
+										dealerimg2.attr("src", dealer.hands[1].suit);
+									}
+										else {
+											var bet = $("#amount").html();
+											var money = $("#balance").html();
+											var newMoney = parseInt(money);
+											$("#balance").html(newMoney);		
+											$(".winOrLose").html("You Lose!");
+											$("#amount").html("0");
+											dealerimg2.attr("src", dealer.hands[1].suit);
+										}
+								}
+
 }
 
 var checkForBust = function() {
@@ -90,12 +289,3 @@ var checkForBust = function() {
 	}
 }
 
-// var resetDeal = function(playerOrDealer) {
-// 	for (var i=0; i<playerOrDealer.hands.length; i++) {
-// 		playerOrDealer.hands[i].pop();
-// 		}
-// 	for (var j=0; j<playerOrDealer.hands.length; j++) {
-// 		playerOrDealer.hands[j].pop();
-// 		}
-// }
-// // player.hands = [];
