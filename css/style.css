@@ -298,3 +298,22 @@ body {
   	margin-right: -55%;
   	transform: translate(-50%, -50%) 
 }
+
+.rules {
+	font: italic bold 20px/20px Georgia, serif;
+	 color: white;
+	 position: absolute;
+	 text-align: left;
+   	top: 100%;
+   	left: 75%;
+  	margin-right: -25%;
+  	transform: translate(-50%, -50%) 
+}
+
+.pic {
+	position: absolute;
+	top: 50%;
+   	left: 15%;
+  	margin-right: -85%;
+  	transform: translate(-50%, -50%) 
+}

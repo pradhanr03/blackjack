@@ -1,6 +1,8 @@
 $(function() {
   console.log('Loaded, bro');
-  var image1 = $("#player4");
+  var noBabies = confirm("Please confirm that you are 21 and over to play BlackJack!");
+ if (noBabies) {
+  	var image1 = $("#player4");
 	var image2 = $("#player3");
 	var image3 = $("#player2");
 	var image4 = $("#player1");
@@ -52,17 +54,18 @@ $(function() {
 
 	
 	$(".deal").click(function() {
+		
 	
 	// balanceAmount.text(player.balance);
 	deck.readyCards();
 	deck.dealCards();
 	console.log("Player's Hands is "+player.hands[0].value+", "+player.hands[1].value);
 	console.log("Dealer's Hands is "+dealer.hands[0].value+", "+dealer.hands[1].value);
+
+
 	
 	image1.attr("src", player.hands[0].suit);
 	image2.attr("src", player.hands[1].suit);
-
-	
 	
 	dealerimg1.attr("src", dealer.hands[0].suit);
 	$("#dealer3").attr("src", "blackjack/card back orange.png");
@@ -97,32 +100,49 @@ $(function() {
 		$("#amount").html("0");
 		dealerimg2.attr("src", dealer.hands[1].suit);
 		}
-			else if (dealer.total === 21) {
-			console.log("dealer wins");
-			this.balance = this.balance + (2.5*player.bet);
-		console.log("Player won "+player.bet+" Player's balance is "+player.balance);
-
-			}
-
+				
 console.log(player.balance);
 
 });
 
 
-var counter =0;
+
 $(".hit").click(function() {
-	counter++;
-	dealer.hit();
-	player.hit();
-	if (counter === 1) {
-	 	image3.attr("src", player.hands[2].suit);	
-	}
-		else if (counter ===2) {
-		image4.attr("src", player.hands[3].suit);
-		}
-	checkForWin();
 	
-	if (player.total > 21) {
+	
+	player.hit();
+		if (player.hands.length === 3) {
+
+	 		$("#player2").attr("src", player.hands[2].suit);	
+	 	}	else if (player.hands.length === 4) {
+	 		$("#player1").attr("src", player.hands[3].suit);
+		}
+
+	dealer.hit();
+		if (dealer.total>21) {
+			console.log("Dealer Bust!");
+			dealerimg2.attr("src", dealer.hands[1].suit);
+			var bet = $("#amount").html();
+			var money = $("#balance").html();
+			var newMoney = parseInt(money)+ 3*(parseInt(bet));
+			$("#balance").html(newMoney);		
+			$(".winOrLose").html("You Win!");
+			$("#amount").html("0");
+		}
+			else if (player.total>21) {
+				$("#dealer3").attr("src", dealer.hands[1].suit);
+				console.log("Player Bust!");
+				var bet = $("#amount").html();
+				var money = $("#balance").html();
+				var newMoney = parseInt(money);
+				$("#balance").html(newMoney);		
+				$(".winOrLose").html("You Lose!");
+				$("#amount").html("0");
+				
+			}
+	
+
+	else if (player.total > 21) {
 		for (var i =0; i<player.hands.length; i++) {
 			if (player.hands[i].value === "A") {
 							player.total -= 10;
@@ -159,16 +179,11 @@ $(".hit").click(function() {
 			}
 		}
 
-			console.log("Player Bust!");
-			var bet = $("#amount").html();
-			var money = $("#balance").html();
-			var newMoney = parseInt(money);
-			$("#balance").html(newMoney);		
-			$(".winOrLose").html("You Lose!");
-			$("#amount").html("0");
-			dealerimg2.attr("src", dealer.hands[1].suit);
-	
+				
 	}
+		
+				
+		
 		
 	console.log(player.hands);
 });
@@ -197,11 +212,17 @@ $(".double").click(function() {
 	player.double();
 
 	dealer.hit();
+	if (player.hands.length === 3) {
 
+	 		$("#player2").attr("src", player.hands[2].suit);	
+	 	}	else if (player.hands.length === 4) {
+	 		$("#player1").attr("src", player.hands[3].suit);
+		}
+	checkForWin();
 	
 	checkForBust();
-	// checkForWin();
-	image3.attr("src", player.hands.pop().suit);
+	
+	// image3.attr("src", player.hands.pop().suit);
 	$("#dealer3").attr("src", dealer.hands[1].suit);
 
 	
@@ -229,33 +250,12 @@ $(".playAgain").click(function() {
 		console.log("Next Round!");
 		$(".winOrLose").html("Next Round");
 		player.balance = parseInt($("#balance").html());
+		deck.cards = [];
+
 
 
 	});
-
-
-
+}
 });
-
-
-//  $(".dealer-cards").html("<div class='card card1'></div><div class='card card2 flipped'></div><div class='new-cards'></div><div class='clear'></div><div id='dealerTotal' class='dealer-total'></div>");
-
-//     $(".player-cards").html("<div class='card card1'></div><div class='card card2'></div><div class='new-cards'></div><div class='clear'></div><div id='playerTotal' class='player-total'></div>");
-
-//     var reloadGame = "<div class='btn' id='hit'>Hit</div><div class='btn' id='stand'>Stand</div>";
-//     $(".buttons").html(reloadGame);
-
-//     $(".dealer-cards").css("width","");
-//     $(".player-cards").css("width","");
-
-//     $("#playerTotal").html('');
-//     $("#dealerTotal").html('');
-//     $("#message").html('');
-
-// }
-
-
-
-
 
 
